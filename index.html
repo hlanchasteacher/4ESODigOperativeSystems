@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitalization 4th ESO - Interactive Workbook</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2rem; }
+        header p { margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.9; }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover { color: var(--primary); }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Content Sections */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards & Forms */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card h2 { margin-top: 0; color: var(--primary); font-size: 1.4rem; }
+        .card h3 { margin-top: 1.5rem; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+        
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea { resize: vertical; min-height: 80px; }
+
+        .link-box {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .link-box a {
+            color: var(--primary);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .link-box a:hover { text-decoration: underline; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th { background-color: #f1f5f9; font-weight: 600; }
+        td input { border: none; width: 90%; padding: 0.25rem; }
+        td input:focus { box-shadow: none; border-bottom: 2px solid var(--primary); border-radius: 0; }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-outline { background-color: transparent; border: 2px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { background-color: #f1f5f9; }
+
+        .saved-badge {
+            display: none;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+            vertical-align: middle;
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            header, .tabs, .actions { display: none; }
+            .container { margin: 0; max-width: 100%; padding: 0; }
+            .tab-content { display: block !important; margin-bottom: 2rem; page-break-inside: avoid; }
+            .card { box-shadow: none; border: 1px solid #ccc; }
+            input[type="text"], textarea { border: 1px solid #ccc; background: #fafafa; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>💻 The Ultimate OS & Software Guide</h1>
+        <p>Digitalization - 4th ESO | Interactive Student Workbook</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('tab1')">1. Research</button>
+            <button class="tab-btn" onclick="openTab('tab2')">2. Simulators</button>
+            <button class="tab-btn" onclick="openTab('tab3')">3. Project Plan</button>
+        </div>
+
+        <!-- TAB 1: RESEARCH -->
+        <div id="tab1" class="tab-content active">
+            <div class="card">
+                <h2>Part 1: Operating Systems & BIOS</h2>
+                <p>Work in pairs to discuss, but write <strong>your own individual answers</strong>. Use the links provided to find the information in English.</p>
+                
+                <div class="link-box">
+                    🔗 <strong>Resource:</strong> <a href="https://edu.gcfglobal.org/en/computerbasics/understanding-operating-systems/1/" target="_blank">GCF Global - Understanding Operating Systems</a><br>
+                    🔗 <strong>Resource:</strong> <a href="https://techterms.com/definition/bios" target="_blank">TechTerms - BIOS Definition</a>
+                </div>
+
+                <div class="form-group">
+                    <label>1. What is the main job of an Operating System (OS)?</label>
+                    <textarea id="q1_1" placeholder="Type your answer here..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>2. What does BIOS stand for, and when does it run?</label>
+                    <textarea id="q1_2" placeholder="Type your answer here..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>3. Explain the difference between System Software (OS) and Application Software (Apps).</label>
+                    <textarea id="q1_3" placeholder="Type your answer here..."></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Part 2: Linux – The Hidden Giant</h2>
+                <div class="link-box">
+                    🔗 <strong>Resource:</strong> <a href="https://simple.wikipedia.org/wiki/Linux" target="_blank">Simple English Wikipedia - Linux</a><br>
+                    🔗 <strong>Resource:</strong> <a href="https://simple.wikipedia.org/wiki/Package_manager" target="_blank">Simple English Wikipedia - Package Manager</a>
+                </div>
+
+                <div class="form-group">
+                    <label>4. Who created the Linux Kernel and in what year?</label>
+                    <input type="text" id="q2_1" placeholder="Type your answer here...">
+                </div>
+
+                <div class="form-group">
+                    <label>5. What is a Linux "Distribution" (Distro)? Name two examples.</label>
+                    <textarea id="q2_2" placeholder="Type your answer here..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>6. What is a Package Manager in Linux? Name the two main formats.</label>
+                    <textarea id="q2_3" placeholder="Type your answer here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: SIMULATORS -->
+        <div id="tab2" class="tab-content">
+            <div class="card">
+                <h2>Part 3: Hands-on Exploration</h2>
+                <p>Click the links below to test different Operating Systems directly in your browser. <strong>Do not download anything.</strong> Complete the table based on your experience.</p>
+
+                <div class="link-box">
+                    🪟 <strong>Windows:</strong> <a href="https://www.onworks.net/os-distributions/programs/online-windows-10" target="_blank">OnWorks Windows Simulator</a> (Click "Start" and wait for it to load. Find the File Explorer).<br><br>
+                    🤖 <strong>Android:</strong> <a href="https://appetize.io/demo" target="_blank">Appetize.io Android Emulator</a> (Click on any phone. Go to Settings > Storage).<br><br>
+                    🐧 <strong>Linux:</strong> <a href="https://distrosea.com/" target="_blank">DistroSea (Linux)</a> (Search for "Ubuntu", click "Start", wait for the desktop, and find the "Software" app).
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>OS Tested</th>
+                            <th>Task Completed</th>
+                            <th>Easy or Difficult? Why?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Windows 10</strong></td>
+                            <td>Find the File Explorer.</td>
+                            <td><input type="text" id="sim_win" placeholder="Your thought..."></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Android</strong></td>
+                            <td>Find the Storage settings.</td>
+                            <td><input type="text" id="sim_and" placeholder="Your thought..."></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Linux (Ubuntu)</strong></td>
+                            <td>Find the Software Center (App Store).</td>
+                            <td><input type="text" id="sim_lin" placeholder="Your thought..."></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: PROJECT PLAN -->
+        <div id="tab3" class="tab-content">
+            <div class="card">
+                <h2>Part 4: Final Product Plan</h2>
+                <p>In Session 2, you will create a digital infographic (Canva) or a webpage (GitHub) summarizing what you learned. Write your plan here first.</p>
+
+                <div class="form-group">
+                    <label>7. Which Operating System would you recommend for a gamer and why?</label>
+                    <textarea id="q4_1" placeholder="I would recommend..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>8. Which Operating System would you recommend for a graphic designer and why?</label>
+                    <textarea id="q4_2" placeholder="I would recommend..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>9. Why do you think most people use Windows instead of Linux on their personal computers, even though Linux is free?</label>
+                    <textarea id="q4_3" placeholder="Most people use Windows because..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>10. Write down the names of 4 Application Software programs you plan to include in your guide (e.g., Microsoft Word, Minecraft).</label>
+                    <textarea id="q4_4" placeholder="1. ... 2. ... 3. ... 4. ..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+            <div>
+                <button class="btn btn-outline" onclick="clearData()">🗑️ Clear All</button>
+                <span id="saveStatus" class="saved-badge">✅ Saved automatically</span>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Switching Logic
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Auto-Save Logic using LocalStorage
+        const inputs = document.querySelectorAll('input[type="text"], textarea');
+        const saveStatus = document.getElementById('saveStatus');
+
+        // Load saved data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            inputs.forEach(input => {
+                const savedValue = localStorage.getItem('digital_eso_' + input.id);
+                if (savedValue) {
+                    input.value = savedValue;
+                }
+            });
+        });
+
+        // Save data on input change
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                localStorage.setItem('digital_eso_' + input.id, input.value);
+                
+                // Show "saved" badge briefly
+                saveStatus.style.display = 'inline-block';
+                clearTimeout(window.saveTimeout);
+                window.saveTimeout = setTimeout(() => {
+                    saveStatus.style.display = 'none';
+                }, 2000);
+            });
+        });
+
+        // Clear Data Logic
+        function clearData() {
+            if (confirm("Are you sure you want to delete all your answers? This cannot be undone.")) {
+                inputs.forEach(input => {
+                    input.value = '';
+                    localStorage.removeItem('digital_eso_' + input.id);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
