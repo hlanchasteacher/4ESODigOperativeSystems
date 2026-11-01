@@ -36,7 +36,7 @@
         header p { margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.9; }
 
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
@@ -124,6 +124,7 @@
             color: var(--primary);
             font-weight: bold;
             text-decoration: none;
+            word-break: break-all;
         }
 
         .link-box a:hover { text-decoration: underline; }
@@ -139,10 +140,45 @@
             border: 1px solid var(--border);
             padding: 0.75rem;
             text-align: left;
+            vertical-align: top;
         }
         th { background-color: #f1f5f9; font-weight: 600; }
-        td input { border: none; width: 90%; padding: 0.25rem; }
+        td input { border: none; width: 90%; padding: 0.25rem; background: transparent; }
         td input:focus { box-shadow: none; border-bottom: 2px solid var(--primary); border-radius: 0; }
+
+        /* Screenshot Upload */
+        .screenshot-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            background-color: #f8fafc;
+            transition: border-color 0.2s;
+            margin-top: 0.5rem;
+        }
+        .screenshot-area:hover { border-color: var(--primary); }
+        
+        .screenshot-area input[type="file"] { display: none; }
+        
+        .screenshot-area label {
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: 600;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            background: white;
+        }
+        .screenshot-area label:hover { background: #eff6ff; }
+
+        .screenshot-preview {
+            margin-top: 1rem;
+            max-width: 100%;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            display: none;
+        }
 
         /* Buttons */
         .actions {
@@ -183,8 +219,11 @@
             header, .tabs, .actions { display: none; }
             .container { margin: 0; max-width: 100%; padding: 0; }
             .tab-content { display: block !important; margin-bottom: 2rem; page-break-inside: avoid; }
-            .card { box-shadow: none; border: 1px solid #ccc; }
+            .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
             input[type="text"], textarea { border: 1px solid #ccc; background: #fafafa; }
+            .screenshot-area { border: 1px solid #ccc; background: white; }
+            .screenshot-area label, .file-name { display: none; }
+            .screenshot-preview { display: block !important; max-height: 400px; object-fit: contain; }
         }
     </style>
 </head>
@@ -198,20 +237,19 @@
     <div class="container">
         
         <div class="tabs">
-            <button class="tab-btn active" onclick="openTab('tab1')">1. Research</button>
-            <button class="tab-btn" onclick="openTab('tab2')">2. Simulators</button>
-            <button class="tab-btn" onclick="openTab('tab3')">3. Project Plan</button>
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Research</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Simulators</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')">3. Project Plan</button>
         </div>
 
         <!-- TAB 1: RESEARCH -->
         <div id="tab1" class="tab-content active">
             <div class="card">
                 <h2>Part 1: Operating Systems & BIOS</h2>
-                <p>Work in pairs to discuss, but write <strong>your own individual answers</strong>. Use the links provided to find the information in English.</p>
+                <p>Work in pairs to discuss, but write <strong>your own individual answers</strong>. Use the link provided to find the information in English.</p>
                 
                 <div class="link-box">
-                    🔗 <strong>Resource:</strong> <a href="https://www.learnfree.org/episode/computer-basics/?id=16371" target="_blank">GCF Global - Understanding Operating Systems</a><br>
-                    🔗 <strong>Resource:</strong> <a href="https://techterms.com/definition/bios" target="_blank">TechTerms - BIOS Definition</a>
+                    🔗 <strong>Resource:</strong> <a href="https://www.learnfree.org/episode/computer-basics/?id=16371" target="_blank">LearnFree - Computer Basics (Operating Systems)</a>
                 </div>
 
                 <div class="form-group">
@@ -232,9 +270,9 @@
 
             <div class="card">
                 <h2>Part 2: Linux – The Hidden Giant</h2>
+                <p>Even if you don't use Linux daily, it powers the internet and Android. Read about it briefly.</p>
                 <div class="link-box">
-                    🔗 <strong>Resource:</strong> <a href="https://simple.wikipedia.org/wiki/Linux" target="_blank">Simple English Wikipedia - Linux</a><br>
-                    🔗 <strong>Resource:</strong> <a href="https://simple.wikipedia.org/wiki/Package_manager" target="_blank">Simple English Wikipedia - Package Manager</a>
+                    🔗 <strong>Resource:</strong> <a href="https://simple.wikipedia.org/wiki/Linux" target="_blank">Simple English Wikipedia - Linux</a>
                 </div>
 
                 <div class="form-group">
@@ -258,40 +296,41 @@
         <div id="tab2" class="tab-content">
             <div class="card">
                 <h2>Part 3: Hands-on Exploration</h2>
-                <p>Click the links below to test different Operating Systems directly in your browser. <strong>Do not download anything.</strong> Complete the table based on your experience.</p>
+                <p>Click the links below to test different Operating Systems directly in your browser. <strong>Do not download anything.</strong> Wait for the simulator to load, complete the task, and <strong>upload a screenshot</strong> as proof.</p>
 
+                <!-- Windows Simulator -->
+                <h3>🪟 Windows 10 Simulator</h3>
                 <div class="link-box">
-                    🪟 <strong>Windows:</strong> <a href="https://www.onworks.net/os-distributions/programs/online-windows-10" target="_blank">OnWorks Windows Simulator</a> (Click "Start" and wait for it to load. Find the File Explorer).<br><br>
-                    🤖 <strong>Android:</strong> <a href="https://appetize.io/demo" target="_blank">Appetize.io Android Emulator</a> (Click on any phone. Go to Settings > Storage).<br><br>
-                    🐧 <strong>Linux:</strong> <a href="https://distrosea.com/" target="_blank">DistroSea (Linux)</a> (Search for "Ubuntu", click "Start", wait for the desktop, and find the "Software" app).
+                    🔗 <strong>Link:</strong> <a href="https://www.onworks.net/playonline/runonworks.php?os=win10_emulator" target="_blank">OnWorks Windows 10 Emulator</a>
+                </div>
+                <div class="form-group">
+                    <label>Task: Open the File Explorer and find the Recycle Bin. How easy or difficult was it to navigate?</label>
+                    <textarea id="sim_win_text" placeholder="Your thought..."></textarea>
+                </div>
+                <div class="screenshot-area">
+                    <label for="file_win">📸 Upload Windows Screenshot</label>
+                    <input type="file" id="file_win" accept="image/*" onchange="previewImage(event, 'win')">
+                    <img id="preview_win" class="screenshot-preview" alt="Windows Screenshot">
+                    <div id="filename_win" class="file-name" style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;"></div>
                 </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>OS Tested</th>
-                            <th>Task Completed</th>
-                            <th>Easy or Difficult? Why?</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Windows 10</strong></td>
-                            <td>Find the File Explorer.</td>
-                            <td><input type="text" id="sim_win" placeholder="Your thought..."></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Android</strong></td>
-                            <td>Find the Storage settings.</td>
-                            <td><input type="text" id="sim_and" placeholder="Your thought..."></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Linux (Ubuntu)</strong></td>
-                            <td>Find the Software Center (App Store).</td>
-                            <td><input type="text" id="sim_lin" placeholder="Your thought..."></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+                <!-- Linux Simulator -->
+                <h3>🐧 Linux (Ubuntu) Simulator</h3>
+                <div class="link-box">
+                    🔗 <strong>Link:</strong> <a href="https://www.onworks.net/os-distributions/ubuntu-based" target="_blank">OnWorks Ubuntu-based Distributions</a>
+                </div>
+                <div class="form-group">
+                    <label>Task: Launch Ubuntu and find the "Software" center (App Store). What differences do you notice compared to Windows?</label>
+                    <textarea id="sim_lin_text" placeholder="Your thought..."></textarea>
+                </div>
+                <div class="screenshot-area">
+                    <label for="file_lin">📸 Upload Linux Screenshot</label>
+                    <input type="file" id="file_lin" accept="image/*" onchange="previewImage(event, 'lin')">
+                    <img id="preview_lin" class="screenshot-preview" alt="Linux Screenshot">
+                    <div id="filename_lin" class="file-name" style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;"></div>
+                </div>
             </div>
         </div>
 
@@ -336,12 +375,12 @@
 
     <script>
         // Tab Switching Logic
-        function openTab(tabId) {
+        function openTab(evt, tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
 
         // Auto-Save Logic using LocalStorage
@@ -356,6 +395,10 @@
                     input.value = savedValue;
                 }
             });
+
+            // Load saved images
+            loadImage('win');
+            loadImage('lin');
         });
 
         // Save data on input change
@@ -372,12 +415,50 @@
             });
         });
 
+        // Image Upload & Preview Logic
+        function previewImage(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Show filename
+            document.getElementById('filename_' + type).innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('preview_' + type);
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                
+                // Save to LocalStorage
+                localStorage.setItem('digital_eso_img_' + type, e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadImage(type) {
+            const savedImage = localStorage.getItem('digital_eso_img_' + type);
+            if (savedImage) {
+                const preview = document.getElementById('preview_' + type);
+                preview.src = savedImage;
+                preview.style.display = 'block';
+                document.getElementById('filename_' + type).innerText = "Saved screenshot loaded.";
+            }
+        }
+
         // Clear Data Logic
         function clearData() {
-            if (confirm("Are you sure you want to delete all your answers? This cannot be undone.")) {
+            if (confirm("Are you sure you want to delete all your answers and screenshots? This cannot be undone.")) {
                 inputs.forEach(input => {
                     input.value = '';
                     localStorage.removeItem('digital_eso_' + input.id);
+                });
+                // Clear images
+                ['win', 'lin'].forEach(type => {
+                    localStorage.removeItem('digital_eso_img_' + type);
+                    document.getElementById('preview_' + type).style.display = 'none';
+                    document.getElementById('preview_' + type).src = '';
+                    document.getElementById('filename_' + type).innerText = '';
+                    document.getElementById('file_' + type).value = '';
                 });
             }
         }
