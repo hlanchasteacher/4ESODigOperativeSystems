@@ -182,7 +182,23 @@
             display: none;
         }
 
-        /* Buttons (Now inside Tab 3) */
+        /* Next Buttons */
+        .next-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-next {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-next:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Actions (Download PDF) */
         .actions {
             display: flex;
             justify-content: space-between;
@@ -225,6 +241,7 @@
         /* Print/PDF specific styles */
         .pdf-mode .tabs,
         .pdf-mode .actions,
+        .pdf-mode .next-container,
         .pdf-mode .screenshot-area label,
         .pdf-mode .file-name,
         .pdf-mode .student-info input {
@@ -336,6 +353,11 @@
                     <textarea id="q2_3" placeholder="Type your answer here..."></textarea>
                 </div>
             </div>
+            
+            <!-- NEXT BUTTON -->
+            <div class="next-container">
+                <button class="btn btn-next" onclick="nextTab('tab2', 1)">Next: Simulators ➡️</button>
+            </div>
         </div>
 
         <!-- TAB 2: SIMULATORS -->
@@ -409,6 +431,11 @@
                 </div>
 
             </div>
+            
+            <!-- NEXT BUTTON -->
+            <div class="next-container">
+                <button class="btn btn-next" onclick="nextTab('tab3', 2)">Next: Project Plan ➡️</button>
+            </div>
         </div>
 
         <!-- TAB 3: PROJECT PLAN -->
@@ -460,6 +487,18 @@
             
             document.getElementById(tabId).classList.add('active');
             evt.currentTarget.classList.add('active');
+        }
+
+        // Next Tab Logic
+        function nextTab(nextTabId, btnIndex) {
+            // Find the corresponding tab button to trigger openTab correctly
+            const nextTabBtn = document.querySelectorAll('.tab-btn')[btnIndex];
+            
+            // Switch the tab
+            openTab({ currentTarget: nextTabBtn }, nextTabId);
+            
+            // Scroll to the top of the page smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Auto-Save Logic using LocalStorage
