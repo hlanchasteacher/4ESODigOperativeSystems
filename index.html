@@ -239,6 +239,11 @@
         }
 
         /* Print/PDF specific styles */
+        .pdf-mode {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
         .pdf-mode .tabs,
         .pdf-mode .actions,
         .pdf-mode .next-container,
@@ -260,13 +265,19 @@
         .pdf-mode .tab-content {
             display: block !important;
             margin-bottom: 2rem;
-            page-break-inside: avoid;
+        }
+
+        /* Force page breaks before tabs 2 and 3 */
+        .pdf-mode #tab2, 
+        .pdf-mode #tab3 {
+            page-break-before: always;
+            break-before: page;
         }
 
         .pdf-mode .card {
             box-shadow: none;
             border: 1px solid #ccc;
-            page-break-inside: avoid;
+            page-break-inside: avoid; /* Prevents a card from splitting across pages */
             margin-bottom: 1rem;
         }
 
@@ -275,6 +286,7 @@
             background: white;
             padding: 0;
             margin-top: 1rem;
+            page-break-inside: avoid;
         }
 
         .pdf-mode .screenshot-preview {
@@ -586,35 +598,38 @@
             const studentName = document.getElementById('studentName').value.trim() || 'Student';
             const container = document.getElementById('main-container');
             
+            // Add PDF mode class
             container.classList.add('pdf-mode');
 
-            const nameDisplay = document.createElement('h3');
-            nameDisplay.innerText = "Student: " + studentName;
-            nameDisplay.style.marginTop = "0";
-            nameDisplay.style.marginBottom = "1.5rem";
-            nameDisplay.style.color = "var(--primary)";
-            nameDisplay.style.borderBottom = "2px solid var(--primary)";
-            nameDisplay.style.paddingBottom = "0.5rem";
+            // Add student name to the top
+            const nameDisplay = document.createElement('div');
+            nameDisplay.style.marginBottom = '2rem';
+            nameDisplay.innerHTML = `<h2 style="margin:0; color:#2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 0.5rem;">Student: ${studentName}</h2>`;
             container.insertBefore(nameDisplay, container.firstChild);
 
+            // PDF Options
             const opt = {
                 margin:       [10, 10, 10, 10],
                 filename:     `OS_Project_${studentName.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollY: 0, windowWidth: 1200 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak:    { mode: ['css', 'legacy'] } // Removed 'avoid-all' to fix blank pages & cut-offs
             };
 
-            html2pdf().set(opt).from(container).save().then(() => {
-                container.classList.remove('pdf-mode');
-                container.removeChild(nameDisplay);
-            }).catch(err => {
-                console.error("PDF generation failed:", err);
-                alert("There was an error generating the PDF. Please ensure all images are loaded.");
-                container.classList.remove('pdf-mode');
-                if(container.contains(nameDisplay)) container.removeChild(nameDisplay);
-            });
+            // Short timeout ensures images are fully loaded into the canvas before capturing
+            setTimeout(() => {
+                html2pdf().set(opt).from(container).save().then(() => {
+                    // Restore UI
+                    container.classList.remove('pdf-mode');
+                    if(container.contains(nameDisplay)) container.removeChild(nameDisplay);
+                }).catch(err => {
+                    console.error("PDF generation failed:", err);
+                    alert("There was an error generating the PDF. Please ensure all images are loaded.");
+                    container.classList.remove('pdf-mode');
+                    if(container.contains(nameDisplay)) container.removeChild(nameDisplay);
+                });
+            }, 500); 
         }
     </script>
 </body>
