@@ -241,7 +241,10 @@
         /* Print/PDF specific styles */
         .pdf-mode {
             margin: 0 !important;
-            padding: 0 !important;
+            padding: 15px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
         }
 
         .pdf-mode .tabs,
@@ -277,7 +280,7 @@
         .pdf-mode .card {
             box-shadow: none;
             border: 1px solid #ccc;
-            page-break-inside: avoid; /* Prevents a card from splitting across pages */
+            page-break-inside: avoid;
             margin-bottom: 1rem;
         }
 
@@ -598,7 +601,10 @@
             const studentName = document.getElementById('studentName').value.trim() || 'Student';
             const container = document.getElementById('main-container');
             
-            // Add PDF mode class
+            // Scroll to top to ensure html2canvas renders from the very beginning
+            window.scrollTo(0, 0);
+
+            // Add PDF mode class (resets margins to prevent left-side cropping)
             container.classList.add('pdf-mode');
 
             // Add student name to the top
@@ -612,9 +618,9 @@
                 margin:       [10, 10, 10, 10],
                 filename:     `OS_Project_${studentName.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollY: 0, windowWidth: 1200 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollY: 0 }, // Removed windowWidth to fix cropping
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'] } // Removed 'avoid-all' to fix blank pages & cut-offs
+                pagebreak:    { mode: ['css', 'legacy'] } 
             };
 
             // Short timeout ensures images are fully loaded into the canvas before capturing
