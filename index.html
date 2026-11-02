@@ -302,7 +302,7 @@
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Research</button>
             <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Simulators</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab3')">3. Project Plan</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')">3. Canva Project</button>
         </div>
 
         <!-- TAB 1: RESEARCH -->
@@ -434,34 +434,48 @@
             
             <!-- NEXT BUTTON -->
             <div class="next-container">
-                <button class="btn btn-next" onclick="nextTab('tab3', 2)">Next: Project Plan ➡️</button>
+                <button class="btn btn-next" onclick="nextTab('tab3', 2)">Next: Canva Project ➡️</button>
             </div>
         </div>
 
-        <!-- TAB 3: PROJECT PLAN -->
+        <!-- TAB 3: CANVA PROJECT -->
         <div id="tab3" class="tab-content">
             <div class="card">
-                <h2>Part 4: Final Product Plan</h2>
-                <p>In Session 2, you will create a digital infographic (Canva) or a webpage (GitHub) summarizing what you learned. Write your plan here first.</p>
+                <h2>Part 4: Canva Infographic Project</h2>
+                <p>For the final task, you will design an infographic using <strong>Canva</strong>. Your infographic must explain the <strong>similarities and differences</strong> between the main Operating Systems.</p>
+                <p><em>Important Note:</em> In real life, we rarely "choose" our OS. We usually use what our parents buy, what the school provides, or what our budget allows. Your infographic should help people understand the OS they are forced to use!</p>
 
-                <div class="form-group">
-                    <label>7. Which Operating System would you recommend for a gamer and why?</label>
-                    <textarea id="q4_1" placeholder="I would recommend..."></textarea>
+                <div class="link-box" style="border-left-color: #8b5cf6; background-color: #f5f3ff;">
+                    🎨 <strong>Canva Link:</strong> <a href="https://www.canva.com/" target="_blank" style="color: #6d28d9;">Go to Canva to create your Infographic</a>
                 </div>
 
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+                <h3>Real World Reality Check</h3>
                 <div class="form-group">
-                    <label>8. Which Operating System would you recommend for a graphic designer and why?</label>
-                    <textarea id="q4_2" placeholder="I would recommend..."></textarea>
+                    <label>7. Think about your own phone and computer. Did you actually "choose" the Operating System? Explain how you got them (e.g., your parents bought it, the school gave it to you, it was a gift).</label>
+                    <textarea id="q4_1" placeholder="Type your reality here..."></textarea>
                 </div>
 
+                <h3>Beyond Phones & Computers</h3>
                 <div class="form-group">
-                    <label>9. Why do you think most people use Windows instead of Linux on their personal computers, even though Linux is free?</label>
+                    <label>8. List 5 devices (NOT tablets, computers, or phones) that have an Operating System. Name the device and the OS it uses (e.g., Smart TV - Android TV / webOS, Car - Android Auto / Apple CarPlay, Smartwatch - WearOS / watchOS).</label>
+                    <textarea id="q4_2" placeholder="1. Device: ... / OS: ...&#10;2. Device: ... / OS: ...&#10;3. Device: ... / OS: ...&#10;4. Device: ... / OS: ...&#10;5. Device: ... / OS: ..."></textarea>
+                </div>
+
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+                <h3>Your Canva Infographic Plan</h3>
+                <p>Plan your Canva design here before you start creating it.</p>
+
+                <div class="form-group">
+                    <label>9. Why do you think most people use Windows instead of Linux on their personal computers, even though Linux is free? (You can include this in your infographic).</label>
                     <textarea id="q4_3" placeholder="Most people use Windows because..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>10. Write down the names of 4 Application Software programs you plan to include in your guide (e.g., Microsoft Word, Minecraft).</label>
-                    <textarea id="q4_4" placeholder="1. ... 2. ... 3. ... 4. ..."></textarea>
+                    <label>10. What will be the 3 main <strong>Differences</strong> and 2 main <strong>Similarities</strong> you will include in your infographic? (e.g., Differences: App stores, customization, price. Similarities: Both use apps, both connect to the internet).</label>
+                    <textarea id="q4_4" placeholder="Differences:&#10;1. ...&#10;2. ...&#10;3. ...&#10;&#10;Similarities:&#10;1. ...&#10;2. ..."></textarea>
                 </div>
             </div>
 
@@ -491,13 +505,8 @@
 
         // Next Tab Logic
         function nextTab(nextTabId, btnIndex) {
-            // Find the corresponding tab button to trigger openTab correctly
             const nextTabBtn = document.querySelectorAll('.tab-btn')[btnIndex];
-            
-            // Switch the tab
             openTab({ currentTarget: nextTabBtn }, nextTabId);
-            
-            // Scroll to the top of the page smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -506,12 +515,10 @@
         const saveStatus = document.getElementById('saveStatus');
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Load text
             inputs.forEach(input => {
                 const savedValue = localStorage.getItem('digital_eso_' + input.id);
                 if (savedValue) input.value = savedValue;
             });
-            // Load images
             ['win', 'lin', 'android', 'ios'].forEach(type => loadImage(type));
         });
 
@@ -579,10 +586,8 @@
             const studentName = document.getElementById('studentName').value.trim() || 'Student';
             const container = document.getElementById('main-container');
             
-            // Add a class to trigger PDF-specific CSS (shows all tabs, hides buttons)
             container.classList.add('pdf-mode');
 
-            // Create a temporary display for the student's name in the PDF
             const nameDisplay = document.createElement('h3');
             nameDisplay.innerText = "Student: " + studentName;
             nameDisplay.style.marginTop = "0";
@@ -592,7 +597,6 @@
             nameDisplay.style.paddingBottom = "0.5rem";
             container.insertBefore(nameDisplay, container.firstChild);
 
-            // PDF Configuration
             const opt = {
                 margin:       [10, 10, 10, 10],
                 filename:     `OS_Project_${studentName.replace(/\s+/g, '_')}.pdf`,
@@ -602,9 +606,7 @@
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            // Generate and save PDF
             html2pdf().set(opt).from(container).save().then(() => {
-                // Restore the normal web UI after download
                 container.classList.remove('pdf-mode');
                 container.removeChild(nameDisplay);
             }).catch(err => {
